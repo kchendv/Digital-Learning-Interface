@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class='content-section'>
+       <div style="height: 20px;"></div>
+       <p> Please access the website using the navigation bar above </p>
+       {% if email %}
+       <p> Welcome, {{email}}</p>
+       {% endif %}
+    </div>
+
+
+{% endblock content%}

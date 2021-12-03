@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+    <body>
+        <h2>New question for: {{class_row[2]}}</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <textarea type="text" id="title" name="title" placeholder="Question Title" rows="2" cols="80"></textarea>
+                <br><br>
+                <textarea type="text" id="description" name="description" placeholder="Type question here..." rows="20" cols="80"></textarea>
+                <br><br>
+                <label for="score">Max Score (0-100):</label>
+                <input type="number" id="score" name="score" min="0" max="100">
+            </div>
+            <button type="create" class="btn btn-primary">Create</button>
+        </form>
+    </body>
+{% endblock content%}

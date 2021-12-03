@@ -1,0 +1,124 @@
+DELIMITER //
+CREATE PROCEDURE grade_filter(IN type VARCHAR(100),
+    IN email VARCHAR(100),
+    IN grade_threshold INT,
+    IN rating_threshold FLOAT,
+    INOUT output varchar(4000))
+BEGIN
+
+    DECLARE cur_stu VARCHAR(100); 
+    DECLARE cur_class VARCHAR(200);
+    DECLARE cur_grade INT; 
+    DECLARE cur_rating FLOAT;
+    DECLARE finished INTEGER DEFAULT 0;
+
+    DECLARE stu_cursor
+    CURSOR FOR
+    SELECT T1.class_name,T1.student_name, avg_pts, final_grade 
+    FROM
+    (SELECT Class.class_name, Student.student_name, AVG(points) as avg_pts
+    FROM Student JOIN Submission ON Student.student_email = Submission.submitter 
+        JOIN Rating ON Submission.submission_id = Rating.submission 
+        JOIN Question ON Submission.question = Question.question_id 
+        JOIN Class ON Question.class_id = Class.class_id
+    WHERE Student.student_email = email
+    GROUP BY Class.class_name, Student.student_name
+    HAVING avg_pts >= rating_threshold) AS T1
+
+    INNER JOIN 
+
+    (SELECT class_name, Student.student_name, final_grade
+    FROM Student NATURAL JOIN Enrollment 
+        JOIN Class ON Class.class_id = Enrollment.class_id
+    WHERE Student.student_email = email
+    HAVING final_grade >= grade_threshold) AS T2
+
+    ON (T1.class_name = T2.class_name)
+    ORDER BY final_grade ASC, avg_pts ASC;
+
+
+    DECLARE teach_cursor
+            CURSOR FOR
+    SELECT T1.class_name, T1.student_name, avg_pts, final_grade 
+    FROM
+    (SELECT Class.class_name, Student.student_name, AVG(points) as avg_pts
+    FROM Student JOIN Submission ON Student.student_email = Submission.submitter 
+        JOIN Rating ON Submission.submission_id = Rating.submission 
+        JOIN Question ON Submission.question = Question.question_id 
+        JOIN Class ON Question.class_id = Class.class_id
+    WHERE Class.teacher_email = email
+    GROUP BY Class.class_name, Student.student_name
+    HAVING avg_pts >= rating_threshold) AS T1
+
+    INNER JOIN 
+
+    (SELECT class_name, Student.student_name, final_grade
+    FROM Student NATURAL JOIN Enrollment 
+        JOIN Class ON Class.class_id = Enrollment.class_id
+    WHERE Class.teacher_email = email
+    HAVING final_grade >= grade_threshold) AS T2
+    ON (T1.class_name = T2.class_name AND T1.student_name = T2.student_name)
+    ORDER BY final_grade ASC, avg_pts ASC;
+
+ 	DECLARE normal_cursor
+    CURSOR FOR
+    SELECT T1.class_name, T1.student_name, avg_pts, final_grade 
+    FROM
+    (SELECT Class.class_name, Student.student_name, AVG(points) as avg_pts
+    FROM Student JOIN Submission ON Student.student_email = Submission.submitter 
+        JOIN Rating ON Submission.submission_id = Rating.submission 
+        JOIN Question ON Submission.question = Question.question_id 
+        JOIN Class ON Question.class_id = Class.class_id
+    GROUP BY Class.class_name, Student.student_name
+    HAVING avg_pts >= rating_threshold) AS T1
+
+    INNER JOIN 
+
+    (SELECT class_name, Student.student_name, final_grade
+    FROM Student NATURAL JOIN Enrollment 
+        JOIN Class ON Class.class_id = Enrollment.class_id
+    HAVING final_grade >= grade_threshold) AS T2
+
+    ON (T1.class_name = T2.class_name)
+    ORDER BY final_grade ASC, avg_pts ASC
+    LIMIT 30;
+
+	DECLARE CONTINUE HANDLER 
+        	FOR NOT FOUND SET finished = 1;
+    IF type = 'student' THEN
+        OPEN stu_cursor;
+        create_string: LOOP
+            FETCH stu_cursor INTO cur_class,cur_stu,cur_rating,cur_grade;
+            IF finished = 1 THEN 
+                LEAVE create_string;
+            END IF;
+            SET output= CONCAT("Class: ",cur_class, ", Student: ",cur_stu, ", Rating: ",cur_rating, ", Grade: ",cur_grade,"\n",output);
+        END LOOP create_string;
+        CLOSE stu_cursor;
+
+    ELSEIF type = 'teacher' THEN
+        OPEN teach_cursor;
+
+        create_string: LOOP
+            FETCH teach_cursor INTO cur_class,cur_stu,cur_rating,cur_grade;
+            IF finished = 1 THEN 
+                LEAVE create_string;
+            END IF;
+            SET output= CONCAT("Class: ",cur_class,", Student: ",cur_stu,", Rating: ",cur_rating,", Grade: ",cur_grade,"\n",output);
+        END LOOP create_string;
+        CLOSE teach_cursor;
+
+    ELSE
+    OPEN normal_cursor;
+        create_string: LOOP
+            FETCH normal_cursor INTO cur_class,cur_stu,cur_rating,cur_grade;
+            IF finished = 1 THEN 
+                LEAVE create_string;
+            END IF;
+            SET output= CONCAT("Class: ",cur_class,", Student: ",cur_stu,", Rating: ",cur_rating,", Grade: ",cur_grade,"\n",output);
+        END LOOP create_string;
+	CLOSE normal_cursor;
+    
+    END IF;
+
+END//

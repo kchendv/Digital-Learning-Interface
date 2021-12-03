@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+    <body>
+        <h2>Submit to: {{question[2]}}</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <textarea type="text" id="answer" name="answer" placeholder="Type your answer here..." rows="20" cols="80"></textarea>
+                <br><br>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </body>
+{% endblock content%}

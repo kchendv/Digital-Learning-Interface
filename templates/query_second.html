@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+        <article class="media content-section">
+            <div class="media-body">
+            <legend class='border-bottom mb-4'>Average Submission Rating of Each Student</legend>
+              <div style="height: 10px;"></div>
+              <div class="table-responsive-sm">
+                <table class="table">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Student Email</th>
+                    <th scope="col">Student Name<div style="height: 2px;">
+                    <th scope="col">Avg Submission Rating</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for result in resultlist %}
+                    <tr>
+                      <th scope="row">{{result[0]}}</th>
+                      <td>{{result[1]}}</td>
+                      <td>{{result[2]}}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+{% endblock content%}

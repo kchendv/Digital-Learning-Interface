@@ -1,0 +1,31 @@
+<!-- 'questions' : variable that stores the question details that user selected -->
+
+{% extends "layout.html" %}
+{% block content %}
+	<article class="media content-section">
+	  <div class="media-body">
+	    <div class="article-metadata">
+			<a href="{{url_for('question_list')}}"> < Back to questions</a>
+			<br/>
+			<br/>
+        <p><b>{{ question[7]}} - Question ID {{ question[1] }}</b></p>
+        <legend class='border-bottom mb-4'> {{question[2]}}</legend>
+		    <p class="article-content">{{ question[3]}}</p>
+        <p>Max score: {{ question[4] }}</p>
+        <!-- <p>Feedback: {{ question[5] }}</p> -->
+      </div>
+
+      <!-- Teacher / student status checker -->
+      {% if logintype == "teacher" %}
+          <a class="btn btn-primary btn-sm mt-1 mb-1" href='{{url_for("submission_list", qid=question[1])}}'>View Submissions</a>
+          <a class="btn btn-success btn-sm mt-1 mb-1" href='{{url_for("question_edit", id=question[1])}}'>Edit</a>
+          <a class="btn btn-danger btn-sm mt-1 mb-1" href='{{url_for("question_delete", id=question[1])}}'>Delete</a>
+
+      {% elif logintype == "student" %}
+					<!-- for students to access rating  -->
+          <a class="btn btn-primary btn-sm mt-1 mb-1" href='{{url_for("submission_list", qid=question[1])}}'>View Submissions</a>
+          <a class="btn btn-success btn-sm mt-1 mb-1" href='{{url_for("submit_new", id=question[1])}}''>Submit Your Answer</a>
+      {% endif %}
+    </div>
+  </article>
+{% endblock content%}

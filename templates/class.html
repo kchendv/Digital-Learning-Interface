@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+        <article class="media content-section">
+            <div class="media-body">
+            <legend class='border-bottom mb-4'>Class List</legend>
+              <div style="height: 10px;"></div>
+              <div class="table-responsive-sm">
+                <table class="table">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Teacher Email<div style="height: 2px;">
+                    <th scope="col">Class Name<div style="height: 2px;">
+                    <th scope="col">Members</th>
+                    {% if logintype == "teacher" %}
+                    <th scope="col"></th>
+                    {% endif %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for class in classlist %}
+                    <tr>
+                      <th scope="row">{{class[0]}}</th>
+                      <td>{{class[1]}}</td>
+                      <td>{{class[2]}}</td>
+                      <td>{{class[3]}}</td>
+                      {% if logintype == "teacher" %}
+                      <td><a type="button" class="btn btn-info btn-sm" href='{{url_for("create_new_question", class_id=class[0])}}'>Create Question</a></td>
+                      {% endif %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+{% endblock content%}

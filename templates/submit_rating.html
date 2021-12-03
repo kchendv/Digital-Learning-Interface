@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+	<article class="media content-section">
+	  <div class="media-body">
+	    <div class="article-metadata">
+			<a href='{{url_for("submission_list", qid=submission[2])}}'> < Back to submission list</a>
+			<br/>
+					<!-- Info for this subission in variable 'submission' -->
+          <div class="media-body">
+            <p><b> ID: {{submission[0]}}</b></p>
+            <legend class='border-bottom mb-4'> Submitter: {{submission[1]}}</legend>
+            <p>{{ submission[3] }}</p>
+          </div>
+		  <p style="margin-bottom: 0;"><b>Please rate this submission (0: Insufficient; 5: Quality Work)</b></p>
+			<form method="POST" enctype="multipart/form-data">
+				<div class="form-group">
+					<input type="range" name="points" id="points" value="0" min="0" max="5" oninput="this.nextElementSibling.value = this.value" style="width: 50%;">
+					<output style="font-size: large; font-weight: bold">0</output>
+				</div>
+				<button type="submit" class="btn btn-primary">Submit Rating</button>
+			</form>
+      </div>
+    </div>
+  </article>
+{% endblock content%}

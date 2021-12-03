@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+	<article class="media content-section">
+	  <div class="media-body">
+	    <div class="article-metadata">
+			<a href='{{url_for("submission_list", qid=submission[2])}}'> < Back to submission list</a>
+			<br/>
+				<!-- Info for this subission in variable 'submission' -->
+				<div class="media-body">
+					<p><b> ID: {{submission[0]}}</b></p>
+					<legend class='border-bottom mb-4'> Submitter: {{submission[1]}}</legend>
+					<p>{{ submission[3] }}</p>
+				</div>
+				<!-- view submission rating as 'rating' -->
+				<p style="margin-bottom: 0;"><b>Peer-Review Submission Rating: </b></p>
+				{% for rating in ratings %}
+				<p style="font-size: xx-large; font-weight: bold">{{rating[2]}}: {{rating[3]}} / 5 </p>
+			  {% endfor %}
+      </div>
+    </div>
+  </article>
+{% endblock content%}

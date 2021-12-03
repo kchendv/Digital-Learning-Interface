@@ -1,0 +1,31 @@
+<!-- 'questions' : variable that stores the question details that user selected -->
+{% extends "layout.html" %}
+{% block content %}
+	<article class="media content-section">
+	  <div class="media-body">
+	    <div class="article-metadata">
+			<a href='{{url_for("question_view", id=qid)}}'> < Back to question</a>
+			<br/>
+        <p><b>Submissions for - Question ID {{qid}}</b></p>
+
+        {% for submission in submissions %}
+          <div class="media-body">
+            <p>
+							{% if (logintype == "student") %}
+								<a class="btn btn-info btn-sm" style="margin-right: 0.5rem;" href='{{url_for("rating_list", submission_id=submission[0])}}'>View Ratings</a>
+								{% if (submission[1] != email) %}
+									<a class="btn btn-warning btn-sm" style="margin-right: 0.5rem;" href='{{url_for("submit_rating", submission_id=submission[0])}}'>Rate</a>
+								{% endif %}
+							{% endif %}
+							<b> ID: {{submission[0]}}</b>
+						</p>
+            <legend class='border-bottom mb-4'> Submitter: {{submission[1]}}</legend>
+            <p style="margin-bottom: 3rem;">{{ submission[3] }}</p>
+          </div>
+        {% endfor %}
+
+      </div>
+    <!-- <button type="button" class="btn btn-rate">Rate</button> -->
+    </div>
+  </article>
+{% endblock content%}

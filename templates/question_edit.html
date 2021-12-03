@@ -1,0 +1,40 @@
+<!-- assuming 'question' is a data entry of the question table itself (no join)
+question[0]:quesion_id
+question[1]:class_id
+question[2]:title
+question[3]:description
+question[4]: score
+(Neglected the attributes that will not be used in this page)-->
+{% extends "layout.html" %}
+{% block content %}
+
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <br/>
+      <legend class='border-bottom mb-4'><b>Edit {{question[2]}}</b></legend>
+    </div>
+    <form method="POST" enctype="multipart/form-data">
+      <div class="mb-3 col-sm-5">
+        <label for="title" class="form-label">Question Title</label>
+        <input type="text" value="{{question[2]}}" class="form-control" id="title" name="title" aria-describedby="emailHelp">
+      </div>
+      <div class="mb-3 col-sm-5">
+        <label for="description" class="form-label">Question Description</label>
+        <textarea type="text" class="form-control" id="description" name="description" rows="10" cols="150">{{question[3]}}</textarea>
+      </div>
+      <div class="mb-3 col-sm-5">
+        <label for="score" class="form-label">Max Score</label>
+        <input type="text" value="{{question[4]}}" class="form-control" id="score" name="score">
+      </div>
+      <button type="submit" class="btn btn-primary">Confirm</button>
+      <button class="btn btn-danger" href='{{url_for("question_view", id=question[1])}}'>Cancel</button>
+    </form>
+  </div>
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">	</script> -->
+
+</article>
+
+{% endblock content%}
